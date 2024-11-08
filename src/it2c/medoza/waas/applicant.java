@@ -17,12 +17,11 @@ public class applicant {
         String apl_address = sc.next();
         System.out.println("applicant sex: ");
         String apl_sex = sc.next();
-        System.out.println("applicant status: ");
-        String apl_status = sc.next();
+       
 
-        String sql = "INSERT INTO applicant_information(apl_id, apl_fname, apl_lname, apl_address, apl_sex,apl_status ) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO applicant_information(apl_id, apl_fname, apl_lname, apl_address, apl_sex ) VALUES (?,?,?,?,?)";
 
-        conf.addRecord(sql, apl_id, apl_fname, apl_lname, apl_address, apl_sex,apl_status);
+        conf.addRecord(sql, apl_id, apl_fname, apl_lname, apl_address, apl_sex);
 
     }
 
@@ -68,8 +67,8 @@ public class applicant {
 
         do {
             System.out.println("1. ADD APPLICANT");
-            System.out.println("2.VIEW APPLICANT");
-            System.out.println("3.UPDATE APPLICANT");
+            System.out.println("2. VIEW APPLICANT");
+            System.out.println("3. UPDATE APPLICANT");
             System.out.println("4. DELETE APPLICANT");
             System.out.println("5. EXIT");
 

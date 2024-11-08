@@ -41,7 +41,7 @@ public class It2cMedozaWaas {
                     break;
                 case 5:
 
-                    System.out.println("Exit Selected...type 'yes' to continue");
+                    System.out.println("Exit Selected...type 'yes' to continue and Exit the program!!!!");
                     String resp = sc.next();
                     if (resp.equalsIgnoreCase("yes")) {
                         exit = false;
