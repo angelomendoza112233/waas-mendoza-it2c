@@ -1,5 +1,6 @@
 package it2c.medoza.waas;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class applicant {
@@ -25,10 +26,10 @@ public class applicant {
 
     }
 
-    private void viewapplicant() {
+    public void viewapplicant() {
         String appQuery = "SELECT * FROM applicant_information";
-        String[] appHeaders = {"ID", "First Name", "Last Name", "Address", "Sex","status"};
-        String[] appColumns = {"apl_id", "apl_fname", "apl_lname", "apl_address", "apl_sex","apl_status"};
+        String[] appHeaders = {"ID", "First Name", "Last Name", "Address", "Sex"};
+        String[] appColumns = {"apl_id", "apl_fname", "apl_lname", "apl_address", "apl_sex",};
         config conf = new config();
         conf.viewRecords(appQuery, appHeaders, appColumns);
     }
@@ -61,54 +62,55 @@ public class applicant {
     }
 
     public void Applicant() {
-        Scanner sc = new Scanner(System.in);
-        String response;
-        boolean exit = true;
+    Scanner sc = new Scanner(System.in);
+    boolean exit = true;
 
-        do {
-            System.out.println("1. ADD APPLICANT");
-            System.out.println("2. VIEW APPLICANT");
-            System.out.println("3. UPDATE APPLICANT");
-            System.out.println("4. DELETE APPLICANT");
-            System.out.println("5. EXIT");
+    do {
+        System.out.println("---------------------------------------------------");
+        System.out.println("1. ADD APPLICANT");
+        System.out.println("2. VIEW APPLICANT");
+        System.out.println("3. UPDATE APPLICANT");
+        System.out.println("4. DELETE APPLICANT");
+        System.out.println("5. EXIT");
 
-            System.out.println("Enter Action");
-            int action = sc.nextInt();
-            applicant app = new applicant();
+        System.out.print("Enter Action: ");
+        int action;
+        try {
+            action = sc.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            sc.next(); // Clear the invalid input
+            continue; // Go back to the start of the loop
+        }
 
-            switch (action) {
+        applicant app = new applicant(); // Assuming 'applicant' is a class you have
 
-                case 1:
-
-                    app.add_applicant();
-
-                    break;
-                case 2:
-                    app.viewapplicant();
-                    break;
-                case 3:
-                    app.viewapplicant();
-                    app.updateapplicant();
-                    app.viewapplicant();
-                    break;
-                case 4:
-                    app.viewapplicant();
-                    app.deleteapplicant();
-                    break;
-                case 5:
-
-                    System.out.println("Exit Selected...type 'yes' to continue to move main panel");
-                    String resp = sc.next();
-                    if (resp.equalsIgnoreCase("yes")) {
-                        exit = false;
-                    }
-
-                    break;
-
-            }
-
-        } while (exit);
-
+        switch (action) {
+            case 1:
+                app.add_applicant();
+                break;
+            case 2:
+                app.viewapplicant();
+                break;
+            case 3:
+                app.viewapplicant();
+                app.updateapplicant();
+                app.viewapplicant();
+                break;
+            case 4:
+                app.viewapplicant();
+                app.deleteapplicant();
+                break;
+            case 5:
+                System.out.println("Exit Selected...type 'yes' to continue to move to the main panel");
+                String resp = sc.next();
+                if (resp.equalsIgnoreCase("yes")) {
+                    exit = false; // Exit the loop
+                }
+                break;
+            default:
+                System.out.println("Invalid option. Please select from 1 to 5.");
+        }
+    } while (exit);
     }
-
 }

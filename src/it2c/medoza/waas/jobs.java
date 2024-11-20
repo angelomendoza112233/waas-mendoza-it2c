@@ -20,7 +20,7 @@ public class jobs {
 
     }
 
-    private void viewjobs() {
+    public void viewjobs() {
         String jobQuery = "SELECT * FROM jobs";
         System.out.println("JOB PANEL");
         String[] jobHeaders = {"job id", "job name", "job salary"};

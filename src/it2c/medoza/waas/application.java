@@ -1,52 +1,36 @@
 package it2c.medoza.waas;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class application {
 
     public void add_application() {
+
         Scanner sc = new Scanner(System.in);
         config conf = new config();
+        applicant apl = new applicant();
+        apl.viewapplicant();
         System.out.println("enter the aplicant id you want to apply: ");
-        String app_id = sc.next();
-        System.out.println("Input applicant given name avilable: ");
-        String app_name = sc.next();
-        System.out.println("Input job name avilable: ");
-        String job_avi = sc.next();
-        System.out.println("Input status of the applicant: ");
-        String app_status = sc.next();
+        int apl_id = sc.nextInt();
+        String sql = "SELECT apl_id from applicant_information where apl_id = ?";
+        while (conf.getSingleValue(sql, apl_id) == 0) {
+            System.out.println("applicant does not exist,please select again: ");
+            apl_id = sc.nextInt();
+        }
+        jobs jb = new jobs();
+        jb.viewjobs();
 
-        String sql = "INSERT INTO application(app_id ,app_name,job_avi,app_status) VALUES (?,?,?,?)";
+        System.out.println("enter the job id you want to apply: ");
+        int job_id = sc.nextInt();
+        String jsql = "SELECT job_id from jobs where job_id = ?";
+        while (conf.getSingleValue(jsql, job_id) == 0) {
+            System.out.println("the job id  does not exist,please select again: ");
+            job_id = sc.nextInt();
 
-        conf.addRecord(sql, app_id, app_name, job_avi, app_status);
-
+        }
     }
 
-    private void viewjobs() {
-        String jobQuery = "SELECT * FROM jobs";
-        String[] jobHeaders = {"JOB AVILABLE"};
-        String[] jobColumns = {"job_name"};
-        config conf = new config();
-        conf.viewRecords(jobQuery, jobHeaders, jobColumns);
-    }
-
-    private void viewapplicant() {
-        String appQuery = "SELECT * FROM applicant_information";
-        String[] appHeaders = {"ID", "First Name", "Last Name", "Address", "Sex", "status"};
-        String[] appColumns = {"apl_id", "apl_fname", "apl_lname", "apl_address", "apl_sex", "apl_status"};
-        config conf = new config();
-        conf.viewRecords(appQuery, appHeaders, appColumns);
-
-    }
-
-    private void viewaplication() {
-        String appQuery = "SELECT * FROM application";
-        String[] appHeaders = {"APPLICANT ID", "APPLICANT NAME", "JOB NAME", "STATUS"};
-        String[] appColumns = {"app_id", "app_name", "job_avi", "app_status"};
-        config conf = new config();
-        conf.viewRecords(appQuery, appHeaders, appColumns);
-
-    }
 
     private void updateapplication() {
         Scanner sc = new Scanner(System.in);
@@ -76,56 +60,50 @@ public class application {
     }
 
     public void Application() {
-        Scanner sc = new Scanner(System.in);
-        String response;
-        boolean exit = true;
+        try (Scanner sc = new Scanner(System.in)) {
+            boolean exit = true;
 
-        do {
-            System.out.println("1.ADD APPLICATION");
-            System.out.println("2.VIEW APPLICATION");
-            System.out.println("3.UPDATE THE STATUS");
-            System.out.println("4.DELETE APPLICATION");
-            System.out.println("5.EXIT");
+            do {
+                System.out.println("1. ADD APPLICATION");
+                System.out.println("2. VIEW APPLICATION");
+                System.out.println("3. UPDATE THE STATUS");
+                System.out.println("4. DELETE APPLICATION");
+                System.out.println("5. EXIT");
 
-            System.out.println("Enter Action");
-            int action = sc.nextInt();
-            application apl = new application();
+                System.out.print("Enter Action: ");
+                int action;
+                try {
+                    action = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.next(); // Clear the invalid input
+                    continue;
+                }
 
-            switch (action) {
+                switch (action) {
+                    case 1:
 
-                case 1:
-                    apl.viewapplicant();
-                    apl.viewjobs();
-                    apl.add_application();
+                        break;
+                    case 2:
 
-                    break;
-                case 2:
-                    apl.viewaplication();
+                        break;
+                    case 3:
 
-                    break;
-                case 3:
-                    apl.viewaplication();
-                    apl.updateapplication();
+                        break;
+                    case 4:
 
-                    break;
-                case 4:
-                    apl.viewaplication();
-
-                    apl.deleteapplication();
-
-                    break;
-                case 5:
-
-                    System.out.println("Exit Selected...type 'yes' to continue to move main panel");
-                    String resp = sc.next();
-                    if (resp.equalsIgnoreCase("yes")) {
-                        exit = false;
-                    }
-
-                    break;
-
-            }
-
-        } while (exit);
+                        break;
+                    case 5:
+                        System.out.println("Exit Selected...type 'yes' to continue to move main panel");
+                        String resp = sc.next();
+                        if (resp.equalsIgnoreCase("yes")) {
+                            exit = false;
+                        }
+                        break;
+                    default:
+                        System.out.println("Invalid option. Please select from 1 to 5.");
+                }
+            } while (exit);
+        }
     }
 }

@@ -46,6 +46,8 @@ public class It2cMedozaWaas {
                     if (resp.equalsIgnoreCase("yes")) {
                         exit = false;
                     }
+                    defualt:
+                        System.out.println("Invalid action please enter 1-5 choises  !!!!\n");
                     break;
             }
 
