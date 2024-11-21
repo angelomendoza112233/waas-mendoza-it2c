@@ -37,7 +37,7 @@ public class jobs {
         System.out.println("Enter the new salary");
         String add = sc.next();
 
-        String qry = "UPDATE jobs SET job_salary = ? WHERE apl_id = ?";
+        String qry = "UPDATE jobs SET job_salary = ? WHERE job_id = ?";
 
         config conf = new config();
         conf.updateRecord(qry, add, id);
@@ -84,6 +84,8 @@ public class jobs {
                     jb.viewjobs();
                     break;
                 case 3:
+                    jb.viewjobs();
+
                     jb.updatejobs();
 
                     break;
