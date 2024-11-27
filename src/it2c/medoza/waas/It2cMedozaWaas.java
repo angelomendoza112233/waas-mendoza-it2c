@@ -46,7 +46,8 @@ public class It2cMedozaWaas {
                         apl.Application();
                         break;
                     case 4:
-                        // You can add your report-related logic here
+                        reports rps=new reports ();
+                        rps.reportsMenu();
                         break;
                     case 5:
                         System.out.println("Exit Selected...type 'yes' to continue and Exit the program!!!!");
