@@ -5,112 +5,132 @@ import java.util.Scanner;
 
 public class applicant {
 
-    public void add_applicant() {
-        Scanner sc = new Scanner(System.in);
-        config conf = new config();
-        System.out.println("id: ");
-        String apl_id = sc.next();
-        System.out.println("frist name: ");
-        String apl_fname = sc.next();
-        System.out.println("last name: ");
-        String apl_lname = sc.next();
-        System.out.println("applicant address: ");
-        String apl_address = sc.next();
-        System.out.println("applicant sex: ");
-        String apl_sex = sc.next();
+    private final Scanner sc = new Scanner(System.in); // Single Scanner instance
 
-        String sql = "INSERT INTO applicant_information(apl_id, apl_fname, apl_lname, apl_address, apl_sex ) VALUES (?,?,?,?,?)";
+    public void addapplicant() {
+        config conf = new config();
+
+        String apl_id = getValidInput("ID (numbers only): ", "^[0-9]+$");
+        String apl_fname = getValidInput("First Name (only letters): ", "^[a-zA-Z]{1,100}$").toLowerCase();
+        String apl_lname = getValidInput("Last Name (only letters): ", "^[a-zA-Z]{1,100}$").toLowerCase();
+        String apl_address = getValidInput("Address: ", "^.{1,100}$");
+        String apl_sex = getValidInput("Sex (M/F): ", "^(?i)(M|F)$").toUpperCase();
+
+        String sql = "INSERT INTO applicant_information(apl_id, apl_fname, apl_lname, apl_address, apl_sex) VALUES (?,?,?,?,?)";
 
         conf.addRecord(sql, apl_id, apl_fname, apl_lname, apl_address, apl_sex);
-
     }
 
     public void viewapplicant() {
         String appQuery = "SELECT * FROM applicant_information";
         String[] appHeaders = {"ID", "First Name", "Last Name", "Address", "Sex"};
-        String[] appColumns = {"apl_id", "apl_fname", "apl_lname", "apl_address", "apl_sex",};
+        String[] appColumns = {"apl_id", "apl_fname", "apl_lname", "apl_address", "apl_sex"};
         config conf = new config();
         conf.viewRecords(appQuery, appHeaders, appColumns);
     }
 
     private void updateapplicant() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter ID ");
-        int id = sc.nextInt();
+        String apl_id = getValidInput("Enter Applicant ID to update (put the given applicant ID): ", "^[0-9]+$");
+        String new_address = getValidInput("Enter the new Address: ", "^.{1,100}$");
 
-        System.out.println("Enter the new Address");
-        String add = sc.next();  // Use nextLine() if address has spaces.
-
-        // Correct the query by updating only the apl_address column once
         String qry = "UPDATE applicant_information SET apl_address = ? WHERE apl_id = ?";
-
-        // Assuming config.updateRecord executes the SQL update
         config conf = new config();
-        conf.updateRecord(qry, add, id);
+        conf.updateRecord(qry, new_address, apl_id);
     }
 
     private void deleteapplicant() {
-
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the ID to Delete: ");
-        int id = sc.nextInt();
+        String apl_id = getValidInput("Enter the ID to Delete (numeric): ", "^[0-9]+$");
 
         String qry = "DELETE FROM applicant_information WHERE apl_id = ?";
-
         config conf = new config();
-        conf.deleteRecord(qry, id);
-
+        conf.deleteRecord(qry, apl_id);
     }
 
-    public void Applicant() {
-        Scanner sc = new Scanner(System.in);
+    public void menu() {
         boolean exit = true;
 
         do {
-            System.out.println("---------------------------------------------------");
+            System.out.println("|--------------------------------------|");
             System.out.println("1. ADD APPLICANT");
             System.out.println("2. VIEW APPLICANT");
             System.out.println("3. UPDATE APPLICANT");
             System.out.println("4. DELETE APPLICANT");
             System.out.println("5. EXIT");
 
-            System.out.print("Enter Action: ");
-            int action;
-            try {
-                action = sc.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                sc.next(); // Clear the invalid input
-                continue; // Go back to the start of the loop
-            }
-
-            applicant app = new applicant(); // Assuming 'applicant' is a class you have
+            int action = getValidInteger("Enter Action (1-5): ", 1, 5);
 
             switch (action) {
                 case 1:
-                    app.add_applicant();
+                    addapplicant();
                     break;
                 case 2:
-                    app.viewapplicant();
+                    viewapplicant();
                     break;
                 case 3:
-                    app.viewapplicant();
-                    app.updateapplicant();
+                    viewapplicant();
+                    updateapplicant();
                     break;
                 case 4:
-                    app.viewapplicant();
-                    app.deleteapplicant();
+                    viewapplicant();
+                    deleteapplicant();
                     break;
                 case 5:
-                    System.out.println("Exit Selected...type 'yes' to continue to move to the main panel");
-                    String resp = sc.next();
-                    if (resp.equalsIgnoreCase("yes")) {
-                        exit = false; // Exit the loop
+                    while (true) {
+                        System.out.println("Exit Selected...type 'yes' to confirm exit or 'no' to go back to the menu:");
+                        String resp = sc.nextLine().trim();
+                        if (resp.equalsIgnoreCase("yes")) {
+                            exit = false; // Exit the program
+                            break;
+                        } else if (resp.equalsIgnoreCase("no")) {
+                            System.out.println("Returning to the menu...");
+                            break; // Return to the menu
+                        } else {
+                            System.out.println("Invalid input. Please type 'yes' to exit or 'no' to return to the menu.");
+                        }
                     }
                     break;
                 default:
                     System.out.println("Invalid option. Please select from 1 to 5.");
             }
         } while (exit);
+
+        System.out.println("Program exited.");
+    }
+
+    private String getValidInput(String prompt, String regex) {
+        String input;
+        do {
+            System.out.print(prompt);
+            input = sc.nextLine().trim();
+            if (!input.toLowerCase().matches(regex.toLowerCase())) {
+                System.out.println("Invalid input. Please try again.");
+            }
+        } while (!input.toLowerCase().matches(regex.toLowerCase()));
+        return input;
+    }
+
+    private int getValidInteger(String prompt, int min, int max) {
+        int value;
+        while (true) {
+            try {
+                System.out.print(prompt);
+                value = sc.nextInt();
+                sc.nextLine(); // Consume the newline
+                if (value >= min && value <= max) {
+                    break;
+                } else {
+                    System.out.println("Input must be between " + min + " and " + max + ".");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.next(); // Clear invalid input
+            }
+        }
+        return value;
+    }
+
+    public static void main(String[] args) {
+        applicant app = new applicant();
+        app.menu();
     }
 }

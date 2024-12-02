@@ -18,7 +18,7 @@ public class config {
         try {
             Class.forName("org.sqlite.JDBC"); 
             con = DriverManager.getConnection("jdbc:sqlite:applicant_information.db"); 
-            System.out.println("Connection Successful");
+          
         } catch (Exception e) {
             System.out.println("Connection Failed: " + e);
         }

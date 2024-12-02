@@ -1,6 +1,6 @@
+
 package it2c.medoza.waas;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class It2cMedozaWaas {
@@ -21,56 +21,63 @@ public class It2cMedozaWaas {
                 System.out.println("5. EXIT");
 
                 System.out.print("Enter Action: ");
-                
-                // Check if the next input is an integer
+
+               
                 if (!sc.hasNextInt()) {
                     System.out.println("Invalid input. Please enter a number between 1 and 5.");
-                    sc.nextInt(); // Clear the invalid input
-                    continue; // Skip to the next iteration of the loop
+                    sc.next();
+                    continue;
                 }
 
-                int action = sc.nextInt();  // Read user action input
-                sc.nextLine(); // Clear the buffer
-
+                int action = sc.nextInt();  
+                sc.nextLine(); 
                 switch (action) {
                     case 1:
+                        System.out.println("|--------------------------------------|\n            APPLICANT PANEL");
                         applicant ap = new applicant();
-                        ap.Applicant();
+                        ap.menu();
+                       
                         break;
+
                     case 2:
+                        System.out.println("|--------------------------------------|\n                JOB PANEL");
                         jobs jb = new jobs();
                         jb.job();
                         break;
+
                     case 3:
+                        System.out.println("|--------------------------------------|\n            APLICATION PANEL");
                         application apl = new application();
                         apl.Application();
                         break;
+
                     case 4:
-                        reports rps=new reports ();
+                        System.out.println("|--------------------------------------|\n            REPORTS PANEL");
+                        reports rps = new reports();
                         rps.reportsMenu();
                         break;
+
                     case 5:
-                        System.out.println("Exit Selected...type 'yes' to continue and Exit the program!!!!");
-                        String resp = sc.nextLine();  // Read the 'yes' response
+                        System.out.println("Exit Selected... Type 'yes' to confirm and exit the program.");
+                        String resp = sc.nextLine();  
                         if (resp.equalsIgnoreCase("yes")) {
+                            System.out.println("Exiting program. Goodbye!");
                             exit = false;
                         }
                         break;
+
                     default:
-                        System.out.println("Invalid action, please enter a choice between 1-5!!!!\n");
+                        System.out.println("Invalid action. Please enter a number between 1 and 5.");
                         break;
                 }
 
-            } catch (InputMismatchException e) {
-                System.err.println("Error: Invalid input. Please enter a valid number.");
-                sc.nextLine(); // Consume the invalid input
             } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
+                System.err.println("Unexpected error: " + e.getMessage());
                 sc.nextLine(); 
             }
 
         } while (exit);
 
-        sc.close();  
+        sc.close();
     }
 }
